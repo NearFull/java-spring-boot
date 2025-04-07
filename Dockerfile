@@ -1,15 +1,10 @@
-# Use the Eclipse alpine official image
-# https://hub.docker.com/_/eclipse-temurin
-FROM eclipse-temurin:21-jdk-alpine
+FROM ubuntu:latest
 
-# Create and change to the app directory.
-WORKDIR /app
+# Copy the start.sh script into the container
+COPY start.sh /start.sh
 
-# Copy files to the container image
-COPY . ./
+# Make start.sh executable
+RUN chmod +x /start.sh
 
-# Build the app.
-RUN ./mvnw -DoutputFile=target/mvn-dependency-list.log -B -DskipTests clean dependency:list install
-
-# Run the app by dynamically finding the JAR file in the target directory
-CMD ["sh", "-c", "java -jar target/*.jar"]
+# Run the start.sh script
+CMD ["/start.sh"]
